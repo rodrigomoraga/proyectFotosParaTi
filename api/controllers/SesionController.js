@@ -36,6 +36,8 @@ module.exports = {
       if (cliente) {
         //session para almacenar la sesion
         peticion.session.cliente = cliente;
+        let carroCompra = await CarroCompra.find({cliente: cliente.id})
+        peticion.session.carroCompra = carroCompra  
         peticion.addFlash('mensaje', 'Sesión iniciada')
         return respuesta.redirect("/");
       }

@@ -9,3 +9,16 @@
  *   https://sailsjs.com/anatomy/assets/styles/importer-less
  */
 /*! This special bang (!) comment is here to trick the `hash` Grunt task into working out-of-the-box, without any real CSS. You can delete this once you've imported ≥1 .less file as demonstrated above. */
+.jumbotron {
+    background-image: url(/images/fondo.jpg);
+    background-size: cover;
+    /* <------ */
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.wf-10 {
+    width: 20%;
+    min-width: 100px;
+    max-width: 200px;
+}
+  
