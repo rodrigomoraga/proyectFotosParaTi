@@ -72,6 +72,18 @@ module.exports = {
     
     },
     
+    desactivarFoto: async (peticion, respuesta) => {
+        await Foto.update({id: peticion.params.fotoId}, {activa: false})
+        peticion.addFlash('mensaje', 'Foto desactivada')
+        return respuesta.redirect("/admin/principal")
+    },
+    
+    activarFoto: async (peticion, respuesta) => {
+    await Foto.update({id: peticion.params.fotoId}, {activa: true})
+    peticion.addFlash('mensaje', 'Foto activada')
+    return respuesta.redirect("/admin/principal")
+    },
+    
 };
   
   

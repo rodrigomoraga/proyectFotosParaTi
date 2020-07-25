@@ -24,6 +24,14 @@
             <td><%=foto.id%></td>
             <td><%=foto.titulo%></td>
             <td><img src="/images/fotos/<%=foto.contenido%>" alt="" class="wf-10"></td>
+            <td><%=foto.activa ? "Si" : "No"%></td>
+            <td>
+              <% if (foto.activa) { %>
+              <a href="/admin/desactivar-foto/<%=foto.id%>" class="btn btn-info">Desactivar Foto</a>
+              <% } else { %>
+              <a href="/admin/activar-foto/<%=foto.id%>" class="btn btn-primary">Activar Foto</a>
+              <% } %>
+            </td>
           </tr>
         <% }) %>
       </tbody>

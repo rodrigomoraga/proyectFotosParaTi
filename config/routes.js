@@ -43,6 +43,8 @@ module.exports.routes = {
   'GET /admin/cerrar-sesion': 'AdminController.cerrarSesion',
   'GET /admin/agregar-foto': 'AdminController.agregarFoto',
   'POST /admin/procesar-agregar-foto': 'AdminController.procesarAgregarFoto',
+  'GET /admin/desactivar-foto/:fotoId': 'AdminController.desactivarFoto',
+  'GET /admin/activar-foto/:fotoId': 'AdminController.activarFoto',
 
   /***************************************************************************
   *                                                                          *
