@@ -20,7 +20,7 @@ module.exports.routes = {
   ***************************************************************************/
 
   'GET /': 'PrincipalController.inicio',
-  '/acerca_de':{view: 'pages/acerda_de'},
+  '/acerca-de':{view: 'pages/acerca_de'},
   'GET /registro':'SesionController.registro',
   'POST /procesar-registro':'SesionController.procesarRegistro',
   'GET /inicio-sesion':'SesionController.inicioSesion',
@@ -33,6 +33,16 @@ module.exports.routes = {
   'GET /mis-ordenes': 'CompraController.misOrdenes',
   'GET /mis-ordenes/:ordenId': 'CompraController.ordenDeCompra',
   'GET /top-vendidas': 'PrincipalController.topVendidas',
+  'GET /agregar-lista-deseo/:fotoId': 'CompraController.agregarListaDeseo',
+  'GET /lista-deseo': 'CompraController.listaDeseo',
+  'GET /eliminar-lista-deseo/:fotoId': 'CompraController.eliminarListaDeseo',
+  /*Seccion admin */
+  'GET /admin/inicio-sesion': 'AdminController.inicioSesion',
+  'POST /admin/procesar-inicio-sesion': 'AdminController.procesarInicioSesion',
+  'GET /admin/principal': 'AdminController.principal',
+  'GET /admin/cerrar-sesion': 'AdminController.cerrarSesion',
+  'GET /admin/agregar-foto': 'AdminController.agregarFoto',
+  'POST /admin/procesar-agregar-foto': 'AdminController.procesarAgregarFoto',
 
   /***************************************************************************
   *                                                                          *
