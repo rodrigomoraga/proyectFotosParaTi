@@ -27,21 +27,38 @@ module.exports = {
         }
         let elementos = await CarroCompra.find({ cliente: peticion.session.cliente.id }).populate('foto')
         respuesta.view('pages/carro_de_compra', {elementos})
-      },
+    },
     
-      eliminarCarroCompra: async (peticion, respuesta) => {
-        let foto = await CarroCompra.findOne({ foto: peticion.params.fotoId, cliente: peticion.session.cliente.id })
-        if (foto) {
-          await CarroCompra.destroy({
-            cliente: peticion.session.cliente.id,
-            foto: peticion.params.fotoId
-          })
-          peticion.session.carroCompra = await CarroCompra.find({ cliente: peticion.session.cliente.id })
-          peticion.addFlash('mensaje', 'Foto eliminada del carro de compra')
-        }
-        return respuesta.redirect("/carro-de-compra")
-      },
-    
+    eliminarCarroCompra: async (peticion, respuesta) => {
+      let foto = await CarroCompra.findOne({ foto: peticion.params.fotoId, cliente: peticion.session.cliente.id })
+      if (foto) {
+        await CarroCompra.destroy({
+          cliente: peticion.session.cliente.id,
+          foto: peticion.params.fotoId
+        })
+        peticion.session.carroCompra = await CarroCompra.find({ cliente: peticion.session.cliente.id })
+        peticion.addFlash('mensaje', 'Foto eliminada del carro de compra')
+      }
+      return respuesta.redirect("/carro-de-compra")
+    },
 
+    comprar: async (peticion, respuesta) => {
+      let orden = await Orden.create({
+        fecha: new Date(),
+        cliente: peticion.session.cliente.id,
+        total: peticion.session.carroCompra.length
+      }).fetch()
+      for(let i=0; i< peticion.session.carroCompra.length; i++){
+        await OrdenDetalle.create({
+          orden: orden.id,
+          foto: peticion.session.carroCompra[i].foto
+        })
+      }
+      await CarroCompra.destroy({cliente: peticion.session.cliente.id})
+      peticion.session.carroCompra = []
+      peticion.addFlash('mensaje', 'La compra ha sido realizada')
+      return respuesta.redirect("/")
+    },
+    
 };
 
