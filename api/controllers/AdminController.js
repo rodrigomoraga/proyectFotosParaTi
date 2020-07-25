@@ -4,6 +4,9 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
+//path permite trabajar con rutas y fs con el sistema de archivos
+const path = require('path')
+const fs = require('fs');
 
 module.exports = {
 
@@ -30,7 +33,8 @@ module.exports = {
         peticion.addFlash('mensaje', 'Sesión inválida')
         return respuesta.redirect("/admin/inicio-sesion")
       }
-      respuesta.view('pages/admin/principal')
+      let fotos = await Foto.find()
+      respuesta.view('pages/admin/principal',{ fotos })
     },
   
     cerrarSesion: async (peticion, respuesta) => {
@@ -50,6 +54,7 @@ module.exports = {
           }).fetch()
           peticion.file('foto').upload({}, async (error, archivos) => {
             if (archivos && archivos[0]) {
+                //.fd indica donde se subio
               let upload_path = archivos[0].fd
               let ext = path.extname(upload_path)
       
