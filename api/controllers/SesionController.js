@@ -34,6 +34,8 @@ module.exports = {
     procesarInicioSesion: async (peticion, respuesta) => {
       let cliente = await Cliente.findOne({ email: peticion.body.email, contrasena: peticion.body.contrasena });
       if (cliente) {
+        //session para almacenar la sesion
+        peticion.session.cliente = cliente;
         peticion.addFlash('mensaje', 'Sesión iniciada')
         return respuesta.redirect("/");
       }
@@ -41,6 +43,12 @@ module.exports = {
         peticion.addFlash('mensaje', 'Email o contraseña invalidos')
         return respuesta.redirect("/inicio-sesion");
       }
+    },
+
+    cerrarSesion: async (peticion, respuesta) => {
+      peticion.session.cliente = undefined;
+      peticion.addFlash('mensaje', 'Sesión finalizada')
+      return respuesta.redirect("/");
     },
   
 

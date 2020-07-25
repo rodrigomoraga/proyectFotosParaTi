@@ -24,6 +24,7 @@ module.exports.routes = {
   'GET /registro':'SesionController.registro',
   'POST /procesar-registro':'SesionController.procesarRegistro',
   'GET /inicio-sesion':'SesionController.inicioSesion',
+  'GET /cerrar-sesion': 'SesionController.cerrarSesion',
   'POST /procesar-inicio-sesion':'SesionController.procesarInicioSesion',
 
   /***************************************************************************
