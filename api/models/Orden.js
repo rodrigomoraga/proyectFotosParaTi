@@ -29,6 +29,11 @@ module.exports = {
       cliente: {
         model: 'cliente',
         columnName: 'cliente_id'
+      },
+
+      detalles: {
+        collection: 'ordendetalle',
+        via: 'orden'
       }
   
     },

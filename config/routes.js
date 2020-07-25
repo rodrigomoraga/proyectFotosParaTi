@@ -30,6 +30,10 @@ module.exports.routes = {
   'GET /carro-de-compra': 'CompraController.carroCompra',
   'GET /eliminar-carro-compra/:fotoId': 'CompraController.eliminarCarroCompra',
   'GET /comprar': 'CompraController.comprar',
+  'GET /mis-ordenes': 'CompraController.misOrdenes',
+  'GET /mis-ordenes/:ordenId': 'CompraController.ordenDeCompra',
+
+
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *

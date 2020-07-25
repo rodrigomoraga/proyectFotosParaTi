@@ -21,6 +21,7 @@ module.exports = {
     }
     return respuesta.redirect("/")
     },
+
     carroCompra: async (peticion, respuesta) => {
         if (!peticion.session || !peticion.session.cliente){
           return respuesta.redirect("/")
@@ -59,6 +60,33 @@ module.exports = {
       peticion.addFlash('mensaje', 'La compra ha sido realizada')
       return respuesta.redirect("/")
     },
+
+    misOrdenes: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.cliente){
+        return respuesta.redirect("/")
+      }
+      let ordenes = await Orden.find({cliente: peticion.session.cliente.id }).sort('id desc')
+      respuesta.view('pages/mis_ordenes', {ordenes})
+    },
+  
+    ordenDeCompra: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.cliente) {
+        return respuesta.redirect("/")
+      }
+      let orden = await Orden.findOne({ cliente: peticion.session.cliente.id, id: peticion.params.ordenId }).populate('detalles')
+  
+      if (!orden) {
+        return respuesta.redirect("/mis-ordenes")
+      }
+  
+      if (orden && orden.detalles == 0) {
+        return respuesta.view('pages/orden', { orden })
+      }
+  
+      orden.detalles = await OrdenDetalle.find({ orden: orden.id }).populate('foto')
+      return respuesta.view('pages/orden', { orden })
+    },
+  
     
 };
 
