@@ -16,7 +16,7 @@ module.exports = {
   
     procesarInicioSesion: async (peticion, respuesta) => {
       let admin = await Admin.findOne({ email: peticion.body.email, contrasena: peticion.body.contrasena })
-      if (admin) {
+      if (admin && admin.activo) {
         peticion.session.admin = admin
         peticion.session.cliente = undefined
         peticion.addFlash('mensaje', 'Sesión de admin iniciada')
@@ -83,7 +83,102 @@ module.exports = {
     peticion.addFlash('mensaje', 'Foto activada')
     return respuesta.redirect("/admin/principal")
     },
+
+    administradores: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      let administradores = await Admin.find()
+      let id = peticion.session.admin.id
+      respuesta.view('pages/admin/administradores',{ administradores, id})
+    },
     
+    activarAdministrador: async (peticion, respuesta) => {
+      await Admin.update({id: peticion.params.adminId}, {activa: true})
+      peticion.addFlash('mensaje', 'Administrador activado')
+      return respuesta.redirect("/admin/administradores")
+    },
+    
+    desactivarAdministrador: async (peticion, respuesta) => {
+      await Admin.update({id: peticion.params.adminId}, {activa: false})
+      peticion.addFlash('mensaje', 'Administrador desactivado')
+      return respuesta.redirect("/admin/administradores")
+    },
+    
+    clientes: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      let clientes = await Cliente.find()
+      respuesta.view('pages/admin/clientes',{ clientes })
+    },
+    
+    activarCliente: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      await Cliente.update({id: peticion.params.clienteId}, {activo: true})
+      peticion.addFlash('mensaje', 'Cliente activado')
+      return respuesta.redirect("/admin/clientes")
+    },
+
+    desactivarCliente: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      await Cliente.update({id: peticion.params.clienteId}, {activo: false})
+      peticion.addFlash('mensaje', 'Cliente desactivado')
+      return respuesta.redirect("/admin/clientes")
+    },
+
+    ordenesCliente: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      let ordenes = await Orden.find({cliente : peticion.params.clienteId}).sort('id desc')
+      respuesta.view('pages/admin/ordenes-cliente', {ordenes})
+    },
+
+    ordenCliente: async (peticion,respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      let orden = await Orden.findOne({cliente: peticion.params.clienteId, id: peticion.params.ordenId}).populate("detalles")
+      if(orden){
+        orden.detalles = await OrdenDetalle.find({ orden: orden.id }).populate('foto')
+        return respuesta.view('pages/admin/orden-cliente',{orden})
+      }
+      else{
+        peticion.addFlash('mensaje', 'Esta orden no existe')
+        respuesta.view('pages/admin/ordenes-cliente')
+      }
+    },
+    
+    dashboard: async (peticion, respuesta) => {
+      if (!peticion.session || !peticion.session.admin){
+        peticion.addFlash('mensaje', 'Sesión inválida')
+        return respuesta.redirect("/admin/inicio-sesion")
+      }
+      let fotos = await Foto.find()
+      let clientes = await Cliente.find()
+      let administradores = await Admin.find()
+      let ordenes = await Orden.find()
+
+      let cantFotos = fotos.length
+      let cantClientes = clientes.length
+      let cantAdmin = administradores.length
+      let cantOrdenes = ordenes.length
+
+      return respuesta.view('pages/admin/dashboard',{cantFotos,cantClientes,cantAdmin,cantOrdenes})
+
+    },
 };
+
   
   

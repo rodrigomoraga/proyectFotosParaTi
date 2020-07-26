@@ -33,7 +33,7 @@ module.exports = {
     
     procesarInicioSesion: async (peticion, respuesta) => {
       let cliente = await Cliente.findOne({ email: peticion.body.email, contrasena: peticion.body.contrasena });
-      if (cliente) {
+      if (cliente && cliente.activo) {
         //session para almacenar la sesion
         peticion.session.cliente = cliente;
         let carroCompra = await CarroCompra.find({cliente: cliente.id})

@@ -45,6 +45,16 @@ module.exports.routes = {
   'POST /admin/procesar-agregar-foto': 'AdminController.procesarAgregarFoto',
   'GET /admin/desactivar-foto/:fotoId': 'AdminController.desactivarFoto',
   'GET /admin/activar-foto/:fotoId': 'AdminController.activarFoto',
+  //++++
+  'GET /admin/administradores': 'AdminController.administradores',
+  'GET /admin/activar-administrador/:adminId': 'AdminController.activarAdministrador',
+  'GET /admin/desactivar-administrador/:adminId': 'AdminController.desactivarAdministrador',
+  'GET /admin/clientes': 'AdminController.clientes',
+  'GET /admin/ordenes-cliente/:clienteId': 'AdminController.ordenesCliente',
+  'GET /admin/ordenes-cliente/:clienteId/orden/:ordenId': 'AdminController.ordenCliente',
+  'GET /admin/activar-cliente/:clienteId': 'AdminController.activarCliente',
+  'GET /admin/desactivar-cliente/:clienteId': 'AdminController.desactivarCliente',
+  'GET /admin/dashboard': 'AdminController.dashboard',
 
   /***************************************************************************
   *                                                                          *
